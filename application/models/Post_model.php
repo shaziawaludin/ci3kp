@@ -29,10 +29,29 @@ class Post_model extends CI_Model
             ->result_array();
     }
 
+    public function getPostById($id)
+    {
+        return $this->db
+            ->where('id_post', $id)
+            ->get('posts')
+            ->row_array();
+    }
+
     public function countPosts($keyword = null)
     {
         return $this->db->like('judul', $keyword)
             ->from('posts')
             ->count_all_results();
+    }
+
+    public function updatePost($id)
+    {
+        $data = array(
+            'judul' => $this->input->post('judul', true),
+            'isi' => $this->input->post('isi', true)
+        );
+        $this->db
+            ->where('id_post', $id)
+            ->update('posts', $data);
     }
 }

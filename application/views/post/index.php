@@ -19,6 +19,7 @@
                     <p class="" style="-webkit-line-clamp:3; overflow:hidden; text-overflow:ellipsis; display: -webkit-box; -webkit-box-orient:vertical;"><?= $post['isi']; ?>
                     </p>
                     <a role="button" href="" class="btn btn-primary">Lihat &raquo;</a>
+                    <a role="button" href="<?= base_url() ?>post/update/<?= $post['id_post'] ?>" class="btn btn-success">Update</a>
                     <hr>
                 </div>
             <?php endforeach; ?>
