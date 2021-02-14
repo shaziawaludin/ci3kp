@@ -8,6 +8,7 @@ class Post extends CI_Controller
         $this->load->model('Post_model');
         // model bisa saja case sensitive, 
         // jadi perhatikan huruf besar kecilnya
+        $this->load->library('form_validation');
     }
 
     //halaman ini akan dijalankan pada:
@@ -113,34 +114,59 @@ class Post extends CI_Controller
     {
         $data['judul'] = 'Tambah Post';
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('post/tambah');
-        $this->load->view('templates/footer');
+        $this->form_validation->set_rules('judul', 'Judul Post', 'required');
+        $this->form_validation->set_rules('isi', 'Isi Post', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('post/tambah');
+            $this->load->view('templates/footer');
+        } else {
+            $this->Post_model->tambahPost();
+            $this->session->set_flashdata('notif', 'ditambahkan');
+            $this->session->set_flashdata('alert', 'success');
+            $this->session->set_flashdata('tipe', 'berhasil');
+            redirect(base_url('post'));
+        }
     }
 
-    public function prosesTambah()
-    {
-        $this->Post_model->tambahPost();
-        echo "sukses menambahkan";
-    }
+    // public function prosesTambah()
+    // {
+    //     $this->Post_model->tambahPost();
+    //     echo "sukses menambahkan";
+    // }
 
     public function update($id)
     {
         $data['judul'] = 'Update Post';
         $data['post'] = $this->Post_model->getPostById($id);
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('post/update', $data);
-        $this->load->view('templates/footer');
+        $this->form_validation->set_rules('judul', 'Judul Post', 'required');
+        $this->form_validation->set_rules('isi', 'Isi Post', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('post/update', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->Post_model->updatePost($id);
+            $this->session->set_flashdata('notif', 'diupdate');
+            $this->session->set_flashdata('alert', 'success');
+            $this->session->set_flashdata('tipe', 'berhasil');
+            redirect(base_url() . "post");
+        }
     }
-    public function prosesUpdate($id)
-    {
-        $this->Post_model->updatePost($id);
-        redirect(base_url() . "post");
-    }
+    // public function prosesUpdate($id)
+    // {
+    //     $this->Post_model->updatePost($id);
+    //     redirect(base_url() . "post");
+    // }
     public function hapus($id)
     {
         $this->Post_model->hapusPost($id);
+        $this->session->set_flashdata('notif', 'dihapus');
+        $this->session->set_flashdata('alert', 'success');
+        $this->session->set_flashdata('tipe', 'berhasil');
         redirect(base_url() . "post");
     }
 }

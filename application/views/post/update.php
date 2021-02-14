@@ -6,7 +6,7 @@
                     Update Post
                 </div>
                 <div class="card-body">
-                    <form action="<?= base_url(); ?>post/prosesUpdate/<?= $post['id_post'] ?>" method="POST">
+                    <form action="<?= base_url(); ?>post/update/<?= $post['id_post'] ?>" method="POST">
                         <div class="form-group">
                             <label for="judul">Judul</label>
                             <input type="text" class="form-control" name="judul" id="judul" placeholder="Masukkan Judul" value="<?= $post['judul'] ?>" required>

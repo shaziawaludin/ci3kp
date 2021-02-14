@@ -1,7 +1,15 @@
 <div class="container">
+    <?php if ($this->session->flashdata('notif')) : ?>
+        <div class="row mt-3">
+            <div class="col-md-4 alert alert-<?= $this->session->flashdata('alert') ?> alert-dismissible fade show">
+                Post <strong><?= $this->session->flashdata('tipe') ?></strong> <?= $this->session->flashdata('notif') ?>
+            </div>
+        </div>
+    <?php endif; ?>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 d-flex justify-content-between">
             <h1>Artikel</h1>
+            <a href="<?= base_url() ?>post/tambah" class="btn btn-primary align-self-center">Tambah Post</a>
         </div>
     </div>
     <!-- <hr> -->
