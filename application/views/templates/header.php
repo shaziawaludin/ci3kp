@@ -26,14 +26,21 @@
                         <a class="nav-link" href="<?= base_url(); ?>">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url(); ?>post">Post</a>
+                        <form action="<?= base_url(); ?>post" method="POST" class="form-inline my-2 my-lg-0">
+                            <input type="hidden" value="" name="keyword">
+                            <button class="nav-link btn" type="submit" name="submit">Post</button>
+                        </form>
                     </li>
-
                 </ul>
                 <form action="<?= base_url(); ?>post" method="POST" class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Cari judul..." aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="submit">Search</button>
                 </form>
+                <?php if (logged_in()) : ?>
+                    <a class="btn btn-outline-secondary my-2 my-sm-0 mx-3" href="<?= base_url('auth/'); ?>logout ">Logout</a>
+                <?php else : ?>
+                    <a class="btn btn-warning my-2 my-sm-0 mx-3" href="<?= base_url('auth'); ?>">Login</a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>

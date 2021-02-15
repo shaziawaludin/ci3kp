@@ -25,6 +25,7 @@ class Post_model extends CI_Model
         return $this->db
             ->select("id_post,judul,SUBSTRING(isi,1,150) as isi")
             ->like('judul', $keyword)
+            ->order_by('id_post', 'asc')
             ->get('posts', $limit, $start)
             ->result_array();
     }
