@@ -17,6 +17,9 @@ class Post extends CI_Controller
     // http://localhost/ci3kp/post/index
     public function index()
     {
+        if ($this->session->userdata('keyword') == false) {
+            $this->session->set_userdata('keyword', '');
+        }
         // PAGINATION
         $this->load->library('pagination');
 
@@ -112,21 +115,25 @@ class Post extends CI_Controller
 
     public function tambah()
     {
-        $data['judul'] = 'Tambah Post';
+        if (logged_in()) {
+            $data['judul'] = 'Tambah Post';
 
-        $this->form_validation->set_rules('judul', 'Judul Post', 'required');
-        $this->form_validation->set_rules('isi', 'Isi Post', 'required');
+            $this->form_validation->set_rules('judul', 'Judul Post', 'required');
+            $this->form_validation->set_rules('isi', 'Isi Post', 'required');
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('post/tambah');
-            $this->load->view('templates/footer');
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('post/tambah');
+                $this->load->view('templates/footer');
+            } else {
+                $this->Post_model->tambahPost();
+                $this->session->set_flashdata('notif', 'ditambahkan');
+                $this->session->set_flashdata('alert', 'success');
+                $this->session->set_flashdata('tipe', 'berhasil');
+                redirect(base_url('post'));
+            }
         } else {
-            $this->Post_model->tambahPost();
-            $this->session->set_flashdata('notif', 'ditambahkan');
-            $this->session->set_flashdata('alert', 'success');
-            $this->session->set_flashdata('tipe', 'berhasil');
-            redirect(base_url('post'));
+            redirect('auth');
         }
     }
 
@@ -138,22 +145,26 @@ class Post extends CI_Controller
 
     public function update($id)
     {
-        $data['judul'] = 'Update Post';
-        $data['post'] = $this->Post_model->getPostById($id);
+        if (logged_in()) {
+            $data['judul'] = 'Update Post';
+            $data['post'] = $this->Post_model->getPostById($id);
 
-        $this->form_validation->set_rules('judul', 'Judul Post', 'required');
-        $this->form_validation->set_rules('isi', 'Isi Post', 'required');
+            $this->form_validation->set_rules('judul', 'Judul Post', 'required');
+            $this->form_validation->set_rules('isi', 'Isi Post', 'required');
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('post/update', $data);
-            $this->load->view('templates/footer');
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header', $data);
+                $this->load->view('post/update', $data);
+                $this->load->view('templates/footer');
+            } else {
+                $this->Post_model->updatePost($id);
+                $this->session->set_flashdata('notif', 'diupdate');
+                $this->session->set_flashdata('alert', 'success');
+                $this->session->set_flashdata('tipe', 'berhasil');
+                redirect(base_url() . "post");
+            }
         } else {
-            $this->Post_model->updatePost($id);
-            $this->session->set_flashdata('notif', 'diupdate');
-            $this->session->set_flashdata('alert', 'success');
-            $this->session->set_flashdata('tipe', 'berhasil');
-            redirect(base_url() . "post");
+            redirect('auth');
         }
     }
     // public function prosesUpdate($id)
@@ -163,10 +174,14 @@ class Post extends CI_Controller
     // }
     public function hapus($id)
     {
-        $this->Post_model->hapusPost($id);
-        $this->session->set_flashdata('notif', 'dihapus');
-        $this->session->set_flashdata('alert', 'success');
-        $this->session->set_flashdata('tipe', 'berhasil');
-        redirect(base_url() . "post");
+        if (logged_in()) {
+            $this->Post_model->hapusPost($id);
+            $this->session->set_flashdata('notif', 'dihapus');
+            $this->session->set_flashdata('alert', 'success');
+            $this->session->set_flashdata('tipe', 'berhasil');
+            redirect(base_url() . "post");
+        } else {
+            redirect('auth');
+        }
     }
 }
